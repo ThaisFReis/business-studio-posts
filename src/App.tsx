@@ -15,6 +15,11 @@ const DEFAULT_BRAND_IDENTITY: BrandIdentity = {
     'Empowering your business identity with consistent visual storytelling across social channels.',
   footerText: 'Brand Company',
   logoUrl: null,
+  primaryColor: '#a855f7',
+  secondaryColor: '#fb923c',
+  useBrandColors: true,
+  pattern: 'grid',
+  patternOpacity: 3,
 };
 
 export default function App() {

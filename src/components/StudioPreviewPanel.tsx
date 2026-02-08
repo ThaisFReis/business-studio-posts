@@ -64,6 +64,20 @@ export default function StudioPreviewPanel(props: StudioPreviewPanelProps) {
   } = props;
 
   const logoSrc = brandIdentity.logoUrl || logoKarn;
+  const accentColor = brandIdentity.useBrandColors
+    ? brandIdentity.primaryColor
+    : theme === 'orange'
+      ? '#f97316'
+      : '#a855f7';
+  const secondaryColor = brandIdentity.useBrandColors ? brandIdentity.secondaryColor : '#60a5fa';
+  const patternBackground =
+    brandIdentity.pattern === 'dots'
+      ? 'radial-gradient(circle, rgba(255,255,255,0.45) 1px, transparent 1px)'
+      : brandIdentity.pattern === 'diagonal'
+        ? 'repeating-linear-gradient(45deg, rgba(255,255,255,0.22) 0, rgba(255,255,255,0.22) 1px, transparent 1px, transparent 10px)'
+        : brandIdentity.pattern === 'grid'
+          ? 'linear-gradient(rgba(255,255,255,0.20) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.20) 1px, transparent 1px)'
+          : 'none';
 
   return (
       <div className="flex-1 bg-black/50 flex flex-col items-center justify-center p-8 relative overflow-hidden">
@@ -82,9 +96,24 @@ export default function StudioPreviewPanel(props: StudioPreviewPanelProps) {
             style={{ width: `${postWidth}px`, height: `${postHeight}px`, boxShadow: '0 0 50px rgba(0,0,0,0.5)' }}
           >
             {/* Effects */}
-            <div className={`absolute top-0 right-0 w-64 h-64 rounded-full blur-[80px] opacity-40 mix-blend-screen ${theme === 'orange' ? 'bg-orange-600' : 'bg-purple-600'}`} style={{ transform: 'translate(30%, -30%)' }}></div>
-            <div className={`absolute bottom-0 left-0 w-80 h-80 rounded-full blur-[90px] opacity-30 mix-blend-screen ${theme === 'orange' ? 'bg-purple-900' : 'bg-orange-900'}`} style={{ transform: 'translate(-30%, 30%)' }}></div>
-            <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: 'linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px)', backgroundSize: '40px 40px' }}></div>
+            <div
+              className="absolute top-0 right-0 w-64 h-64 rounded-full blur-[80px] opacity-40 mix-blend-screen"
+              style={{ transform: 'translate(30%, -30%)', backgroundColor: accentColor }}
+            ></div>
+            <div
+              className="absolute bottom-0 left-0 w-80 h-80 rounded-full blur-[90px] opacity-30 mix-blend-screen"
+              style={{ transform: 'translate(-30%, 30%)', backgroundColor: secondaryColor }}
+            ></div>
+            {brandIdentity.pattern !== 'none' && (
+              <div
+                className="absolute inset-0 pointer-events-none"
+                style={{
+                  backgroundImage: patternBackground,
+                  backgroundSize: brandIdentity.pattern === 'dots' ? '14px 14px' : brandIdentity.pattern === 'grid' ? '40px 40px' : 'auto',
+                  opacity: brandIdentity.patternOpacity / 100,
+                }}
+              />
+            )}
                         {/* User Media Layer - GRID */}
             {/* User Media Layer - GRID */}
             {showMedia && (
@@ -160,7 +189,7 @@ export default function StudioPreviewPanel(props: StudioPreviewPanelProps) {
                 {/* Header Classic */}
                 <div className="flex justify-between items-start">
                    <div className="flex items-center gap-2">
-                      <span className={`w-2 h-2 rounded-full ${theme === 'orange' ? 'bg-orange-500' : 'bg-purple-500'}`}></span>
+                      <span className="w-2 h-2 rounded-full" style={{ backgroundColor: accentColor }}></span>
                       <span className="font-sans text-[10px] tracking-[0.2em] uppercase opacity-90 text-white shadow-black drop-shadow-md">{content.eyebrow || 'INSTITUTO KARN'}</span>
                    </div>
                    <div className="flex items-center gap-2">
@@ -181,7 +210,7 @@ export default function StudioPreviewPanel(props: StudioPreviewPanelProps) {
                  {/* Header Modern (Floating Pill) */}
                  <div className="p-6 flex justify-end">
                     <div className="flex items-center gap-3 bg-white/10 backdrop-blur-md border border-white/10 px-4 py-2 rounded-full">
-                       <span className={`w-1.5 h-1.5 rounded-full ${theme === 'orange' ? 'bg-orange-500' : 'bg-purple-500'}`}></span>
+                       <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: accentColor }}></span>
                        <span className="font-sans text-[9px] tracking-widest uppercase text-white">{content.eyebrow || 'KARN'}</span>
                     </div>
                  </div>
@@ -218,7 +247,7 @@ export default function StudioPreviewPanel(props: StudioPreviewPanelProps) {
             {overlayStyle === 'bold' && (
               <div className="absolute inset-0 z-20 flex flex-col justify-between pointer-events-none">
                  {/* Header Bold */}
-                 <div className={`p-6 ${theme === 'orange' ? 'bg-orange-600' : 'bg-purple-900'} text-white`}>
+                 <div className="p-6 text-white" style={{ backgroundColor: accentColor }}>
                     <div className="flex justify-between items-center">
                        <span className="font-sans text-xs font-bold tracking-widest uppercase">{content.eyebrow || 'INSTITUTO KARN'}</span>
                        <img src={logoSrc} alt="Logo" className="w-5 h-5 brightness-200" />
@@ -229,7 +258,7 @@ export default function StudioPreviewPanel(props: StudioPreviewPanelProps) {
                  {/* Footer Bold */}
                  <div className="p-4 bg-black text-white flex justify-between items-center border-t border-white/10">
                      <div className="flex items-center gap-2">
-                        <div className={`w-2 h-8 ${theme === 'orange' ? 'bg-orange-500' : 'bg-purple-500'}`}></div>
+                        <div className="w-2 h-8" style={{ backgroundColor: accentColor }}></div>
                         <span className="font-sans text-[10px] uppercase tracking-wider">{brandIdentity.footerText}</span>
                      </div>
                      <span className="font-mono text-xs">{content.date}</span>
@@ -257,7 +286,11 @@ export default function StudioPreviewPanel(props: StudioPreviewPanelProps) {
                     <div className="space-y-6">
                        <h1 className={`font-serif leading-[1.1]`} style={{ fontSize: `${titleFontSize}px` }}>
                         {content.title.split(' ').map((word, i) => (
-                          <span key={i} className={i % 3 === 1 ? `text-transparent bg-clip-text bg-gradient-to-r ${gradientClass}` : ''}>
+                          <span
+                            key={i}
+                            className={i % 3 === 1 ? `text-transparent bg-clip-text ${brandIdentity.useBrandColors ? '' : `bg-gradient-to-r ${gradientClass}`}` : ''}
+                            style={i % 3 === 1 && brandIdentity.useBrandColors ? { backgroundImage: `linear-gradient(to right, ${accentColor}, ${secondaryColor})` } : undefined}
+                          >
                             {word}{' '}
                           </span>
                         ))}
@@ -279,7 +312,7 @@ export default function StudioPreviewPanel(props: StudioPreviewPanelProps) {
                         {content.listItems.map((item, index) => (
                           <div key={index} className="flex items-start gap-3 group">
                             <div className="mt-1 w-4 h-4 rounded-full border border-white/20 flex items-center justify-center bg-white/5">
-                              <div className={`w-1.5 h-1.5 rounded-full ${theme === 'orange' ? 'bg-orange-500' : 'bg-purple-500'}`}></div>
+                              <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: accentColor }}></div>
                             </div>
                             <p className={`font-sans text-neutral-300 flex-1 border-b border-white/5 pb-2`} style={{ fontSize: `${bodyFontSize}px` }}>{item}</p>
                           </div>
@@ -291,7 +324,7 @@ export default function StudioPreviewPanel(props: StudioPreviewPanelProps) {
                   {postType === 'announcement' && (
                     <div className="text-center space-y-6">
                       <div className="inline-block p-3 rounded-full bg-white/5 border border-white/10 mb-2">
-                        <Sparkles size={24} className={theme === 'orange' ? 'text-orange-400' : 'text-purple-400'} />
+                        <Sparkles size={24} style={{ color: accentColor }} />
                       </div>
                       <h1 className={`font-serif leading-none tracking-tight`} style={{ fontSize: `${titleFontSize}px` }}>
                         {content.title}
@@ -300,7 +333,10 @@ export default function StudioPreviewPanel(props: StudioPreviewPanelProps) {
                         {content.body}
                       </p>
                       {showCTA && (
-                        <div className={`inline-block mt-4 ${ctaPaddingClass} rounded-full border ${theme === 'orange' ? 'border-orange-500/30 bg-orange-500/10 text-orange-300' : 'border-purple-500/30 bg-purple-500/10 text-purple-300'} text-xs tracking-widest uppercase font-sans whitespace-nowrap`}>
+                        <div
+                          className={`inline-block mt-4 ${ctaPaddingClass} rounded-full border text-xs tracking-widest uppercase font-sans whitespace-nowrap`}
+                          style={{ borderColor: `${accentColor}55`, backgroundColor: `${accentColor}22`, color: accentColor }}
+                        >
                           {content.cta}
                         </div>
                       )}
@@ -320,7 +356,7 @@ export default function StudioPreviewPanel(props: StudioPreviewPanelProps) {
                       <span className="font-sans text-[9px] uppercase tracking-wider opacity-50 mb-1">Web3 Education</span>
                       <div className="flex gap-1">
                         <div className="w-1 h-4 bg-white/20"></div>
-                        <div className={`w-1 h-4 ${theme === 'orange' ? 'bg-orange-500' : 'bg-purple-500'}`}></div>
+                        <div className="w-1 h-4" style={{ backgroundColor: accentColor }}></div>
                         <div className="w-1 h-4 bg-white/20"></div>
                       </div>
                     </div>
@@ -358,7 +394,7 @@ export default function StudioPreviewPanel(props: StudioPreviewPanelProps) {
                 {(showLogo || showName || showSlogan) && (
                   <div className="absolute bottom-12 left-1/2 transform -translate-x-1/2 flex gap-1">
                     <div className="w-6 h-0.5 bg-white/20"></div>
-                    <div className={`w-6 h-0.5 ${theme === 'orange' ? 'bg-orange-500' : 'bg-purple-500'}`}></div>
+                    <div className="w-6 h-0.5" style={{ backgroundColor: accentColor }}></div>
                     <div className="w-6 h-0.5 bg-white/20"></div>
                   </div>
                 )}
@@ -419,7 +455,7 @@ export default function StudioPreviewPanel(props: StudioPreviewPanelProps) {
                 {(showLogo || showName || showSlogan) && (
                   <div className="absolute bottom-3 left-1/2 transform -translate-x-1/2 flex gap-1">
                     <div className="w-10 h-0.5 bg-white/10"></div>
-                    <div className={`w-10 h-0.5 ${theme === 'orange' ? 'bg-orange-500' : 'bg-purple-500'}`}></div>
+                    <div className="w-10 h-0.5" style={{ backgroundColor: accentColor }}></div>
                     <div className="w-10 h-0.5 bg-white/10"></div>
                   </div>
                 )}

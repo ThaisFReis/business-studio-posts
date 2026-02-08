@@ -24,6 +24,11 @@ export interface BrandIdentity {
   slogan: string;
   footerText: string;
   logoUrl: string | null;
+  primaryColor: string;
+  secondaryColor: string;
+  useBrandColors: boolean;
+  pattern: 'none' | 'grid' | 'dots' | 'diagonal';
+  patternOpacity: number;
 }
 
 export type LayoutType = 'single' | 'split-h' | 'split-v' | 'grid-2x2';
