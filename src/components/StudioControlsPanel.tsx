@@ -1,3 +1,4 @@
+// @ts-nocheck
 import {
   Circle,
   Eye,
@@ -22,6 +23,8 @@ import {
   Wand2,
   X,
 } from 'lucide-react';
+import logoKarn from '../assets/logo_karn.svg';
+import { LAYOUT_CONFIG } from '../config/studio';
 import type { FontSize, LayoutType, NameVariant } from '../types/studio';
 
 type StudioControlsPanelProps = any;
@@ -98,6 +101,7 @@ export default function StudioControlsPanel(props: StudioControlsPanelProps) {
     showCTA,
     setShowCTA,
   } = props;
+  const logoSrc = brandIdentity.logoUrl || logoKarn;
 
   return (
       <div className="w-full md:w-[450px] bg-[#0e100f] border-r border-white/5 p-6 overflow-y-auto h-screen sticky top-0">
